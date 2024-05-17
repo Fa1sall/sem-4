@@ -1,28 +1,29 @@
-//Chat Application
-import java.io.*;
 import java.net.*;
+import java.io.*;
 
-class server {
-  public static void main(String[] args) {
-    try {
-      ServerSocket ss = new ServerSocket(6666);
-      Socket s = ss.accept();
+public class Server {
+    public static void main(String[] args) {
 
-      DataInputStream din = new DataInputStream(s.getInputStream());
-      DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {    
 
-      String msgin = "", msgout = "";
-      while (!msgin.equals("end")) {
-        msgin = din.readUTF();
-        System.out.println("Client says: " + msgin);
-        msgout = br.readLine();
-        dout.writeUTF(msgout);
-        dout.flush();
-      }
-      ss.close();
-    } catch (Exception e) {
-      System.out.println("Error: " + e.getMessage());
+            ServerSocket ss = new ServerSocket(1999);
+            Socket s = ss.accept();
+
+            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+            while (!br.readLine().equals("quit")) {
+                dos.writeUTF(br.readLine());
+                System.out.print("she says: " + dis.readUTF());
+            }
+
+            ss.close();
+
+        } catch (IOException ie){
+        
+            ie.printStackTrace();
+        
+        }
     }
-  }
 }

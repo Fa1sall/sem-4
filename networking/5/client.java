@@ -1,24 +1,25 @@
-import java.io.*;
 import java.net.*;
+import java.io.*;
 
-class client {
-  public static void main(String[] args) {
-    try {
-      Socket s = new Socket("localhost", 6666);
-      DataInputStream din = new DataInputStream(s.getInputStream());
-      DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+public class Client {
+    public static void main(String[] args){
+        
+        try {
 
-      String msgin = "", msgout = "";
-      while (!msgin.equals("end")) {
-        msgout = br.readLine();
-        dout.writeUTF(msgout);
-        msgin = din.readUTF();
-        System.out.println("Server says:" + msgin);
-      }
-      s.close();
-    } catch (Exception e) {
-      System.out.println("Error: " + e.getMessage());
+            Socket s = new Socket("localhost",1999);
+            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            
+            while (!br.readLine().equals("quit")){
+                dos.writeUTF(br.readLine());
+                System.out.print("he says:" + dis.readUTF());
+                dos.flush();
+            }
+            s.close();
+        
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
     }
-  }
 }
